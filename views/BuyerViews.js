@@ -102,6 +102,7 @@ exports.Pawn = class extends React.Component {
 
 exports.Redeem = class extends React.Component {
   render() {
+    const {parent, standardUnit} = this.props;
     const id = (this.state || {}).id;
     const redeemPrice = (this.state || {}).redeemPrice;
     const endDate = (this.state || {}).endDate;

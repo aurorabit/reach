@@ -1,7 +1,8 @@
 import React from 'react';
 import AppViews from './views/AppViews';
-import DeployerViews from './views/DeployerViews';
-import AttacherViews from './views/BuyerViews';
+import CreatorViews from './views/CreatorViews';
+import BuyerViews from './views/BuyerViews';
+import PawnBrokerViews from './views/PawnBrokerViews';
 import {renderDOM, renderView} from './views/render';
 import './index.css';
 import * as backend from './build/index.main.mjs';
@@ -59,7 +60,7 @@ class Creator extends React.Component {
     const ctcInfoStr = JSON.stringify(await ctc.getInfo(), null, 2);
     this.setState({view: 'WaitingForAttacher', ctcInfoStr});
   }
-  render() { return renderView(this, DeployerViews); }
+  render() { return renderView(this, CreatorViews); }
 }
 
 class Buyer extends React.Component {
@@ -77,7 +78,7 @@ class Buyer extends React.Component {
   async buy(id, price) {
     const tmp = reach.formatCurrency(price, 4);
     await new Promise(resolveHandP => {
-      this.setState({view: 'BuyNFT', id, tmp, resolveHandP});
+      this.setState({view: 'BuyNFT', id, tmp, standardUnit, resolveHandP});
     });
   }
 
@@ -102,7 +103,7 @@ class Buyer extends React.Component {
   getEndDate() {return this.pawnPrice};
 
   buyIt() {
-    this.setState({view: 'Pawn'});
+    this.setState({view: 'Pawn', standardUnit});
   }
   render() { return renderView(this, BuyerViews); }
 }

@@ -73,11 +73,7 @@ exports.BuyNFT = class extends React.Component {
 
 exports.acceptPawn = class extends React.Component {
   render() {
-    const {parent, id, pawnPrice, redeemPrice, duration, tax, standardUnit} = this.props;
-    const id = (this.state || {}).id;
-    const pawnPrice = (this.state || {}).pawnPrice;
-    const redeemPrice = (this.state || {}).redeemPrice;
-    const endDate = (this.state || {}).endDate;
+    const {parent, id, pawnPrice, redeemPrice, endDate, standardUnit} = this.props;
     return (
       <div>
         The info of Pawn:
