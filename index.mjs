@@ -33,7 +33,7 @@ import * as backend from './build/index.main.mjs';
         }, getPrice: () => {
           return price;
         }, getTax: () => {
-          return tax;
+          return stdlib.parseCurrency(tax);
         }
       }
     ),
@@ -42,7 +42,7 @@ import * as backend from './build/index.main.mjs';
       ctcBob,
       {
         buy: (id, price) => {
-        console.log(`Bob costs ${stdlib.add(price, tax)} for purchasing ${id}, price: ${price} + tax: ${tax}`);
+          console.log(`Bob costs ${stdlib.add(price, tax)} for purchasing ${id}, price: ${price} + tax: ${tax}`);
         },
         pawn: (id, pawnEarn, duration) => {
           console.log(`Bob want to pawn with ${pawnEarn}. (at most ${duration} days)`)

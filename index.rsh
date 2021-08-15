@@ -94,9 +94,9 @@ export const main =
     if (endDate >= duration + startDate || redeemCost < pawnEarn) {
       transfer(redeemCost).to(B);
     } else {
-      // const res2 = redeemCost - tax;
-      // transfer(res2).to(C);
-      transfer(redeemCost).to(C);
+      const res2 = redeemCost - tax;
+      transfer(tax).to(A);
+      transfer(res2).to(C);
       vNFT.owner.set(B);
     }
     commit();
