@@ -52,11 +52,12 @@ exports.BuyNFT = class extends React.Component {
   render() {
     const {id, price, standardUnit, parent} = this.props;
     const {disabled} = this.state || {};
+    console.log(id, price);
     return (
       <div>
         The info of NFT:
-        <br /> Id: #{id} {standardUnit}
-        <br /> Price: {price} {standardUnit}
+        <br /> Id: #{`${id}`}
+        <br /> Price: {`${price}`} {standardUnit}
         <br />
         <button
           disabled={disabled}
@@ -73,27 +74,29 @@ exports.BuyNFT = class extends React.Component {
 exports.Pawn = class extends React.Component {
   render() {
     const {parent, standardUnit} = this.props;
-    const id = (this.state || {}).id;
     const pawnPrice = (this.state || {}).pawnPrice;
     const redeemPrice = (this.state || {}).redeemPrice;
     const endDate = (this.state || {}).endDate;
     return (
       <div>
-        <input
+        pawnPrice: <input
           type='number'
           onChange={(e) => this.setState({pawnPrice: e.currentTarget.value})}
         /> {standardUnit}
-        <input
+        <br />
+        redeemPrice: <input
           type='number'
           onChange={(e) => this.setState({redeemPrice: e.currentTarget.value})}
         /> {standardUnit}
-        <input
+        <br />
+        endDate: <input
           type='number'
           onChange={(e) => this.setState({endDate: e.currentTarget.value})}
-        /> {standardUnit}
+        />
+        <br />
         <br />
         <button
-          onClick={() => parent.pawn(id, pawnPrice, redeemPrice, endDate)}
+          onClick={() => parent.pawnIt(pawnPrice, redeemPrice, endDate)}
         >Pawn</button>
       </div>
     );
@@ -120,4 +123,15 @@ exports.Redeem = class extends React.Component {
     )
   }
 }
+
+exports.WaitingForPawn = class extends React.Component {
+  render() {
+    return (
+      <div>
+        Waiting for Pawn...
+      </div>
+    );
+  }
+}
+
 export default exports;

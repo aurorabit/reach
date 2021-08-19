@@ -8,7 +8,7 @@ import './index.css';
 import * as backend from './build/index.main.mjs';
 import {loadStdlib} from '@reach-sh/stdlib';
 const reach = loadStdlib(process.env);
-const {standardUnit} = reach;
+const standardUnit = 'CFX';
 const defaults = {defaultFundAmt: '10', defaultWager: '3', standardUnit};
 
 class App extends React.Component {
@@ -44,7 +44,7 @@ class Creator extends React.Component {
     super(props);
     this.state = {view: 'SetInfo'};
   }
-  SetInfo(id, price, tax) { this.setState({view: 'Deploy', id, price, tax}); }
+  setInfo(id, price, tax) { this.setState({view: 'Deploy', id, price, tax}); }
   getId() {return this.state.id;}
   getPrice() {return this.state.price;}
   getTax() {return this.state.tax;}
@@ -55,7 +55,6 @@ class Creator extends React.Component {
     this.id = reach.parseCurrency(this.state.id); // UInt
     this.price = reach.parseCurrency(this.state.price); // UInt
     this.tax = reach.parseCurrency(this.state.tax); // UInt
-    this.deadline = {ETH: 10, ALGO: 100, CFX: 1000}[reach.connector]; // UInt
     backend.Creator(ctc, this);
     const ctcInfoStr = JSON.stringify(await ctc.getInfo(), null, 2);
     this.setState({view: 'WaitingForAttacher', ctcInfoStr});
@@ -75,32 +74,39 @@ class Buyer extends React.Component {
     backend.Buyer(ctc, this);
   }
 
-  async buy(id, price) {
-    const tmp = reach.formatCurrency(price, 4);
+  async buy(idAtomic, priceAtomic) {
+    console.log(idAtomic, priceAtomic);
+    const id = idAtomic.toNumber();
+    const price = priceAtomic.toNumber();
+    console.log(id, price);
     await new Promise(resolveHandP => {
-      this.setState({view: 'BuyNFT', id, tmp, standardUnit, resolveHandP});
+      this.setState({view: 'BuyNFT', id, price, standardUnit, resolveHandP});
     });
   }
 
-  pawn(id, pawnPrice, redeemPrice, endDate) {
+  async pawnIt(pawnPrice, redeemPrice, endDate) {
+    console.log('pawn it in');
     this.pawnPrice = pawnPrice;
     this.redeemPrice = redeemPrice;
     this.endDate = endDate;
+    this.setState({view: 'WaitingForPawn'});
+    console.log('pawn it out');
   }
 
-  async redeem(id, pawnPrice, redeemPrice, endDate) {
+  async redeem(id, redeemPrice, endDate) {
+    console.log("redeem in");
     await new Promise(resolveHandP => {
       this.setState({view: 'Redeem', id, resolveHandP});
     });
   }
 
   redeemIt(id) {
-    return;
+    this.setState({view: 'Redeem Success', id});
   }
 
-  getPawnPrice() {return this.pawnPrice};
-  getRedeemPrice() {return this.pawnPrice};
-  getEndDate() {return this.pawnPrice};
+  getPawnPrice()   {return this.pawnPrice};
+  getRedeemPrice() {return this.redeemPrice};
+  getEndDate()     {return this.endDate};
 
   buyIt() {
     this.setState({view: 'Pawn', standardUnit});
@@ -119,10 +125,9 @@ class PawnBroker extends React.Component {
     backend.PawnBroker(ctc, this);
   }
 
-  async accept(id, pawnPrice, redeemPrice, endDate) { // Fun([UInt], Null)
-    return await new Promise(resolveAcceptedP => {
-      this.setState({view: 'acceptPawn', id, pawnPrice, redeemPrice, endDate, resolveAcceptedP});
-    });
+  accept(id, pawnPrice, redeemPrice, endDate) { // Fun([UInt], Null)
+    console.log("start accept");
+    this.setState({view: 'acceptPawn', id, pawnPrice, redeemPrice, endDate});
   }
 
   finish() {}

@@ -25,21 +25,21 @@ exports.SetInfo = class extends React.Component {
     const tax = (this.state || {}).tax || defaultTax;
     return (
       <div>
-        <input
+        ID: <input
           type='number'
           placeholder={defaultId}
           onChange={(e) => this.setState({id: e.currentTarget.value})}
-        /> {standardUnit}
-        <input
+        /> <br/>
+        Price: <input
           type='number'
           placeholder={defaultPrice}
           onChange={(e) => this.setState({price: e.currentTarget.value})}
-        /> {standardUnit}
-        <input
+        /> CFX<br/>
+        Tax: <input
           type='number'
           placeholder={defaultTax}
           onChange={(e) => this.setState({tax: e.currentTarget.value})}
-        /> {standardUnit}
+        /> CFX
         <br />
         <button
           onClick={() => parent.setInfo(id, price, tax)}

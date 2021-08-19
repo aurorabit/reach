@@ -7,7 +7,7 @@ const Creator = {getId: Fun([], UInt), getPrice: Fun([], UInt), getTax: Fun([], 
 // Buy NFT, total cost
 const Buyer = {
   buy: Fun([UInt, UInt], Null),
-  pawn: Fun([UInt, UInt, UInt, UInt], Null),
+  pawnIt: Fun([], Null),
   redeem: Fun([UInt, UInt, UInt], Null),
   getPawnPrice: Fun([], UInt),
   getRedeemPrice: Fun([], UInt),
@@ -60,6 +60,7 @@ export const main =
       const pawnPrice = declassify(interact.getPawnPrice());
       const redeemPrice = declassify(interact.getRedeemPrice());
       const endDate = declassify(interact.getEndDate());
+      interact.pawnIt();
     });
     B.publish(pawnPrice, redeemPrice, endDate);
     commit();
@@ -71,7 +72,6 @@ export const main =
 
     C.pay(pawnPrice);
     transfer(pawnPrice).to(B);
-    vNFT.owner.set(C);
     commit();
 
     // B try to redeem NFT
