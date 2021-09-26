@@ -34,12 +34,12 @@ exports.SetInfo = class extends React.Component {
           type='number'
           placeholder={defaultPrice}
           onChange={(e) => this.setState({price: e.currentTarget.value})}
-        /> CFX<br/>
+        /> {standardUnit}<br/>
         Tax: <input
           type='number'
           placeholder={defaultTax}
           onChange={(e) => this.setState({tax: e.currentTarget.value})}
-        /> CFX
+        /> {standardUnit}
         <br />
         <button
           onClick={() => parent.setInfo(id, price, tax)}

@@ -7,9 +7,15 @@ import {renderDOM, renderView} from './views/render';
 import './index.css';
 import * as backend from './build/index.main.mjs';
 import {loadStdlib} from '@reach-sh/stdlib';
-const reach = loadStdlib(process.env);
+
 const standardUnit = 'CFX';
 const defaults = {defaultFundAmt: '10', defaultWager: '3', standardUnit};
+
+const reach = loadStdlib({
+  REACH_CONNECTOR_MODE: 'CFX',
+  REACH_BUG: 'yes',
+});
+reach.setProviderByName('TestNet');
 
 class App extends React.Component {
   constructor(props) {
@@ -17,6 +23,8 @@ class App extends React.Component {
     this.state = {view: 'ConnectAccount', ...defaults};
   }
   async componentDidMount() {
+    const now = await reach.getNetworkTime();
+    reach.setQueryLowerBound(reach.sub(now, 2000));
     const acc = await reach.getDefaultAccount();
     const balAtomic = await reach.balanceOf(acc);
     const bal = reach.formatCurrency(balAtomic, 4);
