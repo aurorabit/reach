@@ -15,7 +15,7 @@ const reach = loadStdlib({
   REACH_CONNECTOR_MODE: 'CFX',
   REACH_BUG: 'yes',
 });
-reach.setProviderByName('TestNet');
+reach.setProviderByName('MainNet');
 
 class App extends React.Component {
   constructor(props) {
@@ -25,6 +25,7 @@ class App extends React.Component {
   async componentDidMount() {
     const now = await reach.getNetworkTime();
     reach.setQueryLowerBound(reach.sub(now, 2000));
+
     const acc = await reach.getDefaultAccount();
     const balAtomic = await reach.balanceOf(acc);
     const bal = reach.formatCurrency(balAtomic, 4);
@@ -37,13 +38,13 @@ class App extends React.Component {
     }
   }
   async fundAccount(fundAmount) {
-    await reach.transfer(this.state.faucet, this.state.acc, reach.parseCurrency(fundAmount));
+    // await reach.transfer(this.state.faucet, this.state.acc, reach.parseCurrency(fundAmount));
     this.setState({view: 'DeployerOrAttacher'});
   }
   async skipFundAccount() { this.setState({view: 'DeployerOrAttacher'}); }
+  selectCreator() { this.setState({view: 'Wrapper', ContentView: Creator}); }
   selectBuyer() { this.setState({view: 'Wrapper', ContentView: Buyer}); }
   selectPawnBroker() { this.setState({view: 'Wrapper', ContentView: PawnBroker}); }
-  selectCreator() { this.setState({view: 'Wrapper', ContentView: Creator}); }
   render() { return renderView(this, AppViews); }
 }
 
@@ -127,6 +128,7 @@ class PawnBroker extends React.Component {
     super(props);
     this.state = {view: 'Attach'};
   }
+  
   attach(ctcInfoStr) {
     const ctc = this.props.acc.attach(backend, JSON.parse(ctcInfoStr));
     this.setState({view: 'Attaching'});
